@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #myCanvas{
+        position : fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background: radial-gradient(circle, #456, #122);
+      }
+    </style>
+  </head>
+  <body>
+
+    <canvas id="myCanvas">
+      Your browser does not support the HTML5 canvas tag.
+    </canvas>
+
+    <script>
+
+      MAX = 96;
+
+      canv = document.getElementById("myCanvas");
+      ctx = canv.getContext("2d");
+
+      canv.height = innerHeight;
+      canv.width = innerWidth;
+
+      console.log("Width  : " + canv.width);
+      console.log("Height : " + canv.height);
+
+      vines = [{x:0, y:0, a:0, ai:0, w:8, p:[], l:MAX}];
+
+      lastTime = (new Date()).getTime();
+
+      onload = function update()
+      {
+        //console.log("onload " + frame);
+        newTime = (new Date()).getTime();
+        deltaTime = (newTime - lastTime)/1000;
+        lastTime = newTime;
+
+        // clear
+        ctx.clearRect(0, 0, canv.width, canv.height);
+
+        // update
+        vines.forEach(v=>{
+          dx = Math.cos(v.a) * v.w/2;
+          dy = Math.sin(v.a) * v.w/2;
+          v.x += dx;
+          v.y += dy;
+          v.a += v.ai;
+          v.p.push({x:v.x, y:v.y, dx:dx, dy:dy});
+        });
+        //render
+
+
+        ctx.strokeStyle = '#fff';
+        toto = "animate " + deltaTime;
+        //ctx.translate(canv.width/2, canv.height/2);
+        ctx.save();
+        ctx.translate(canv.width/2, canv.height/2);
+        vines.forEach( v=> {
+          if( v.w == 8)
+          {
+            ctx.translate(-v.x, -v.y);
+            ctx.beginPath();
+            l = v.p.lenth-1;
+            
+          }
+        });
+
+        //ctx.strokeText(toto, 0,0);
+        ctx.restore();
+
+        requestAnimationFrame(update);
+        
+      } 
+
+    </script>
+  </body>
+</html>
